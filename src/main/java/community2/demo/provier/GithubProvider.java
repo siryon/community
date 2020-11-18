@@ -19,6 +19,7 @@ import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 /*
 * 用来获取github第三方登录的信息*/
@@ -28,7 +29,6 @@ public class GithubProvider {
 
        MediaType mediaType = MediaType.get("application/json; charset=utf-8");
        OkHttpClient client = new OkHttpClient();
-
        RequestBody body = RequestBody.create(mediaType,JSON.toJSONString(accesstakendto));
        Request request = new Request.Builder()
                .url("https://github.com/login/oauth/access_token")
