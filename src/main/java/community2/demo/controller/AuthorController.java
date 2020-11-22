@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 @Controller
@@ -21,7 +23,7 @@ public class AuthorController {
     @Autowired
     private GithubProvider githubProvider;
 
-    @Autowired(required=false)
+    @Autowired
     private UserMapper userMapper;
     
     @Value("${github.client.id}")
@@ -34,7 +36,8 @@ public class AuthorController {
     @GetMapping("/callback")
     public String callback(@RequestParam(name="code") String code,
                            @RequestParam(name="state") String state,
-                           HttpServletRequest request) throws Exception {
+                           HttpServletResponse response) throws Exception {
+        //将数据传输到github中，获取github的值
         AccessTakenDto assesstakendto = new AccessTakenDto();
         assesstakendto.setCode(code);
         assesstakendto.setClient_id(clientId);
@@ -42,19 +45,25 @@ public class AuthorController {
         assesstakendto.setState(state);
         assesstakendto.setRedirect_uri(redirectUri);
 
-        String token = githubProvider.getaccesstaken(assesstakendto);
-        GithubUser githubuser = githubProvider.getUser(token);
+        //获取从github上返回的值
+        String accesstoken = githubProvider.getaccesstaken(assesstakendto);
+        GithubUser githubuser = githubProvider.getUser(accesstoken);
         if (githubuser != null){
+            //登陆成功
             User user = new User();
-            user.setToken(UUID.randomUUID().toString());
+            String token = UUID.randomUUID().toString();
+            user.setToken(token);
             user.setAccount_id(String.valueOf(githubuser.getId()));
             user.setName(githubuser.getName());
             user.setGmt_create(System.currentTimeMillis());
             user.setGmt_modified(user.getGmt_modified());
+            user.setBio(githubuser.getBio());
             userMapper.insert(user);
 
             //登录成功，可以写入cookie和session
-            request.getSession().setAttribute("user",githubuser);
+            //写入Cookie
+
+            response.addCookie(new Cookie("token", token));
             return "redirect:/";
         }else{
             //登录失败，应该要给予反馈

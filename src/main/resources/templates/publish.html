@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>publish_problem</title>
+    <!--引入资源文件-->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" th:href="@{css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{css/bootstrap-theme.min.css}" />
+    <link rel="stylesheet" th:href="@{css/publish.css}" />
+    <script th:src="@{webjars/jquery/3.5.1/dist/jquery.min.js}"></script>
+</head>
+<body >
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Hermit Community</span>
+
+                </button>
+                <a class="navbar-brand" href="#">Hermit Community</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <form class="navbar-form navbar-left">
+                    <div class="form-group">
+                        <label>
+                            <input type="text" class="form-control" placeholder="Search topic" />
+                        </label>
+
+                    </div>
+                    <button type="submit" class="btn btn-default">Search</button>
+                </form>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown" th:if="${session.user != null}">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false" th:text="${session.user.getName()}"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">message</a></li>
+                            <li><a href="#">my data</a></li>
+                            <li><a href="#">login out</a></li>
+                        </ul>
+                    </li>
+                    <li th:if="${session.user == null}"><a href="https://github.com/login/oauth/authorize?client_id=4e6a5e29ce81350605df&redirect_uri=http://localhost:8090/callback&scope=user&state=1">login</a></li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid main" >
+        <div class="row">
+            <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12 ">
+                <h2><span class="glyphicon glyphicon-eur" aria-hidden="true"></span> 发起</h2>
+                <hr>
+                <form action="">
+                    <div class="form-group">
+                        <label for="question_title">question description（try simple）</label>
+                        <input type="text" class="form-control" id="question_title" placeholder="problem description">
+                    </div>
+                    <div class="form-group">
+                        <label for="question_supplement">question supplement(please reference idea in right)</label>
+                        <textarea name="question_supplement" class="form-control" id="question_supplement" placeholder="question_supplement" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="labels">add labels</label>
+                        <input name="labels" class="form-control" id="labels" placeholder="add labels,Separated by commas">
+                    </div>
+                    <button type="submit" class="btn btn-success btn-publish">submit</button>
+                </form>
+            </div>
+            <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                <h2>Raise a question</h2>
+                <p>question title: the simple description for question, no more than 25 words</p>
+                <p>question supplement: the supplement of question, be sure the description of question is intuitive, and provide some data about this question</p>
+                <p>labels:the add some labels for question, separated by commas</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

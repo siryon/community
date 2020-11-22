@@ -8,6 +8,16 @@ public class User {
     private long gmt_create;
     private  long gmt_modified;
 
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    private String bio;
+
     public int getId() {
         return id;
     }
