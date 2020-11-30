@@ -52,22 +52,30 @@
     <div class="container-fluid main" >
         <div class="row">
             <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12 ">
-                <h2><span class="glyphicon glyphicon-eur" aria-hidden="true"></span> 发起</h2>
+                <h2><span class="glyphicon glyphicon-eur" aria-hidden="true"></span> publish the topic</h2>
                 <hr>
-                <form action="">
+                <form action="/publish" method="post">
                     <div class="form-group">
-                        <label for="question_title">question description（try simple）</label>
-                        <input type="text" class="form-control" id="question_title" placeholder="problem description">
+                        <label for="title">question description（try simple）</label>
+                        <input type="text" class="form-control" th:value="${title}" name="title" id="title" placeholder="problem title">
                     </div>
                     <div class="form-group">
-                        <label for="question_supplement">question supplement(please reference idea in right)</label>
-                        <textarea name="question_supplement" class="form-control" id="question_supplement" placeholder="question_supplement" rows="4"></textarea>
+                        <label for="description">question supplement(please reference idea in right)</label>
+                        <textarea name="description" th:value="${description}" class="form-control" id="description" placeholder="please add the question_supplement" rows="4"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="labels">add labels</label>
-                        <input name="labels" class="form-control" id="labels" placeholder="add labels,Separated by commas">
+                        <label for="tag">add labels</label>
+                        <input name="tag" class="form-control" th:value="${tag}" id="tag" placeholder="add labels,Separated by commas">
                     </div>
-                    <button type="submit" class="btn btn-success btn-publish">submit</button>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="alert-danger col-lg-9 col-md-12 col-sm-12 col-xs-12"  role="alert" th:text="${error}" th:if="${error != null}"></div>
+                            <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                                <button type="submit" class="btn btn-success btn-publish">submit</button>
+                            </div>
+                        </div>
+                    </div>
+
                 </form>
             </div>
             <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">

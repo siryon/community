@@ -17,13 +17,12 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
-
 @Controller
 public class AuthorController {
     @Autowired
     private GithubProvider githubProvider;
 
-    @Autowired
+    @Autowired(required = false)
     private UserMapper userMapper;
     
     @Value("${github.client.id}")
@@ -48,7 +47,7 @@ public class AuthorController {
         //获取从github上返回的值
         String accesstoken = githubProvider.getaccesstaken(assesstakendto);
         GithubUser githubuser = githubProvider.getUser(accesstoken);
-        if (githubuser != null){
+        if (githubuser != null && githubuser.getId() != 0){
             //登陆成功
             User user = new User();
             String token = UUID.randomUUID().toString();
@@ -58,6 +57,7 @@ public class AuthorController {
             user.setGmt_create(System.currentTimeMillis());
             user.setGmt_modified(user.getGmt_modified());
             user.setBio(githubuser.getBio());
+            user.setAvatar_url(githubuser.getAvatar_url());
             userMapper.insert(user);
 
             //登录成功，可以写入cookie和session
